@@ -6,10 +6,12 @@ const divError = document.createElement('div')
 divError.classList.add('error')
 
 // im JSON.parse ( String [{Objekte}] || "[]") sind beides strings
+//holt Json von localstorage
 const todos = JSON.parse(localStorage.getItem("todos") || "[]")
 
 for (const todo of todos){
     console.log(todo)
+    //*todoo.text greift auf das Value zu vom geparsten todos
     const li = document.createElement('li')
     li.innerHTML = `<div class=view>
             <input class=toggle />

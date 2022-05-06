@@ -6,12 +6,12 @@ const divError = document.createElement('div')
 divError.classList.add('error')
 
 // im JSON.parse ( String [{Objekte}] || "[]") sind beides strings
-//holt Json von localstorage
+//holt Json von localstorage parsen in [{text:"value"}
 const todos = JSON.parse(localStorage.getItem("todos") || "[]")
 
 for (const todo of todos){
     console.log(todo)
-    //*todoo.text greift auf das Value zu vom geparsten todos
+    //*todoo.text => key  greift auf das Value zu vom geparsten todos
     const li = document.createElement('li')
     li.innerHTML = `<div class=view>
             <input class=toggle />
@@ -19,6 +19,7 @@ for (const todo of todos){
             <button class="destroy"></button>
             </div>`
     list.appendChild(li)
+    //*****Anzeige aller Todos die sich bereits im  LocalStorage befinden****
 
     li.querySelector('.destroy').addEventListener('click', () => {
         li.remove()
@@ -26,7 +27,7 @@ for (const todo of todos){
     })
 }
 
-
+//***** Kreiiren von neuen Todos *****
 input.addEventListener('keyup', (ev) => {
     if (ev.code === 'Enter') {
         const text = input.value
@@ -45,7 +46,7 @@ input.addEventListener('keyup', (ev) => {
             <button class="destroy"></button>
             </div>`
             list.appendChild(li)
-
+            //******Todos in LocalStorage speichern ******
             //key und value sind das gleiche wenn nur ein objekt gespeichert wird
             todos.push({text})
             localStorage.setItem("todos", JSON.stringify(todos))

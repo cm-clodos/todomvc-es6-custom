@@ -18,13 +18,13 @@ for (const todo of todos){
 }
 
 input.addEventListener('keyup', (ev) => {
-    if (ev.code === 'Enter') {
+    if(ev.code === 'Enter'){
         const text = input.value
 
-        if (text.length === 0) {
+        if(text.length === 0){
             errorDiv.innerText = "Text darf nicht leer sein!"
             input.parentNode.appendChild(errorDiv)
-        } else {
+        }else{
             errorDiv.remove()
             const li = document.createElement('li')
             li.innerHTML = `<div class="view">
@@ -33,7 +33,7 @@ input.addEventListener('keyup', (ev) => {
       <button class="destroy" />
       </div>`
             list.appendChild(li)
-            todos.push({text})
+            todos.push({ text })
             localStorage.setItem("todos", JSON.stringify(todos))
 
             input.value = ''
@@ -43,10 +43,4 @@ input.addEventListener('keyup', (ev) => {
             })
         }
     }
-    }
-
-
-
-
-
-
+})

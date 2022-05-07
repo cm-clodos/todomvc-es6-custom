@@ -99,17 +99,21 @@ class Controller {
 
         const todos = this.store.loadAllTodos();
         this.view.renderTodos(todos)
-        this.view.setOnAddItemCallback((text) => {
-            if (text.length === 0) {
-                this.view.renderError("Dieser Text darf nicht leer sein")
-            }else{
-                const newId = this.store.add({text})
-                this.view.renderItem({newId, text})
-            }
-        })
-        this.view.setOnRemoveItemCallback((id) => {
-            this.store.remove(id)
-        })
+        this.view.setOnAddItemCallback((...a) => this.onAddItem(...a))
+
+        this.view.setOnRemoveItemCallback((...a) => this.onRemoveItem(...a))
+
+    }
+    onAddItem(text){
+        if (text.length === 0) {
+            this.view.renderError("Dieser Text darf nicht leer sein")
+        }else{
+            const newId = this.store.add({text})
+            this.view.renderItem({newId, text})
+        }
+    }
+    onRemoveItem(id){
+        this.store.remove(id)
     }
 }
 

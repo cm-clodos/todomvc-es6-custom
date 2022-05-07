@@ -1,18 +1,46 @@
-const input = document.querySelector('.new-todo')
-const list = document.querySelector('.todo-list')
-const errorDiv = document.createElement('div')
-errorDiv.classList.add('error')
+
 
 class View {
     constructor(store) {
         this.store = store
-        list.addEventListener("click", (event) =>{
+        this.input = document.querySelector('.new-todo')
+        this.list = document.querySelector('.todo-list')
+        this.errorDiv = document.createElement('div')
+        this.errorDiv.classList.add('error')
+
+        this.input.addEventListener('keyup', (ev) => {
+            if (ev.code === 'Enter') {
+                const text = this.input.value
+                this.onAddItem(text)
+
+                }
+
+        })
+
+        this.list.addEventListener("click", (event) =>{
             if (event.target.classList.contains('destroy')){
                 const id = Number(event.target.closest('[data-id]').dataset.id)
-                this.store.remove(id)
+                this.onRemoveItem(id)
                 event.target.closest('li').remove()
             }
             })
+    }
+    renderItem(item){
+        this.errorDiv.remove()
+        this.input.value = ''
+        const li = view.createListItem(item)
+        this.list.appendChild(li)
+    }
+    renderError(text){
+        this.errorDiv.innerText =
+        this.input.parentNode.appendChild(this.errorDiv)
+    }
+    setOnAddItemCallback(fn){
+        this.onAddItem = fn
+    }
+
+    setOnRemoveItemCallback(fn){
+        this.onRemoveItem = (fn)
     }
 
     createListItem(item) {
@@ -24,6 +52,13 @@ class View {
       </div>`
 
         return li
+    }
+
+    renderTodos(todos){
+        for (const todo of todos) {
+            const li = view.createListItem(todo)
+            this.list.appendChild(li)
+        }
     }
 }
 
@@ -56,35 +91,35 @@ class Store {
     }
 
 }
-const store = new Store()
-const view = new View(store)
+class Controller {
 
+    constructor(store, view) {
+        this.store = store
+        this.view = view
 
-const todos = store.loadAllTodos();
-for (const todo of todos) {
-    const li = view.createListItem(todo)
-    list.appendChild(li)
-
+        const todos = this.store.loadAllTodos();
+        this.view.renderTodos(todos)
+        this.view.setOnAddItemCallback((text) => {
+            if (text.length === 0) {
+                this.view.renderError("Dieser Text darf nicht leer sein")
+            }else{
+                const newId = this.store.add({text})
+                this.view.renderItem({newId, text})
+            }
+        })
+        this.view.setOnRemoveItemCallback((id) => {
+            this.store.remove(id)
+        })
+    }
 }
 
 
-input.addEventListener('keyup', (ev) => {
-    if (ev.code === 'Enter') {
-        const text = input.value
 
-        if (text.length === 0) {
-            errorDiv.innerText = "Text darf nicht leer sein!"
-            input.parentNode.appendChild(errorDiv)
-        } else {
-            errorDiv.remove()
-            const newId = store.add({text})
-            const li = view.createListItem({id:newId, text})
-            list.appendChild(li)
+const store = new Store()
+const view = new View(store)
+const ctrl = new Controller(store,view)
 
 
-            input.value = ''
 
 
-        }
-    }
-})
+

@@ -2,16 +2,16 @@ version: "3.3"
 
 services:
   client:
-    image: ideadapt/todomvc-client:latest
+    image: clodos/todomvc-client:latest
     networks:
       - todonet
 
   server:
-    image: ideadapt/todomvc-java-server:latest
+    image: clodos/todomvc-java-server:latest
     networks:
       - todonet
     environment:
-      # db is the docker-network internal DNS name of the db service
+      # db is the docker-network internal DNS name of the db service (connection zu Datenbank
       - JDBC_URI=jdbc:mysql://db:3306/todo
 
   db:
